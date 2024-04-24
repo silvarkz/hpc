@@ -1,0 +1,48 @@
+#include <iostream>
+#include <vector>
+#include <stack>
+#include <omp.h>
+
+using namespace std;
+
+struct Node {
+    int value;
+    vector<Node*> children;
+};
+
+void dfs(Node* node) {
+    if (node == nullptr) return;
+    cout << node->value << " ";
+    #pragma omp parallel for
+    for (size_t i = 0; i < node->children.size(); ++i) {
+        dfs(node->children[i]);
+    }
+}
+
+int main() {
+    Node* root = new Node{1};
+    stack<Node*> nodes;
+    nodes.push(root);
+    char choice;
+
+    do {
+        cout << "Enter data for the next node: ";
+        int data;
+        cin >> data;
+        Node* newNode = new Node{data};
+        Node* current = nodes.top();
+        current->children.push_back(newNode);
+        nodes.push(newNode);
+        cout << "Do you want to insert one more node? (y/n): ";
+        cin >> choice;
+    } while (choice == 'y' || choice == 'Y');
+
+    cout << "DFS traversal result: ";
+    dfs(root);
+    cout << endl;
+
+    // Clean up memory
+    // You may want to implement a function to delete the nodes in a similar fashion to DFS
+
+    return 0;
+}

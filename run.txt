@@ -1,0 +1,11 @@
+g++ exe.cpp
+./a.out
+
+
+and
+g++ -fopenmp programname.cpp -o pr
+./pr
+
+
+sudo apt install libomp-dev
+export OMP_NUM_THREADS=8
